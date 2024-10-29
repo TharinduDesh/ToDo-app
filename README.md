@@ -12,7 +12,7 @@ npm install express mysql2 body-parser cors
 
 ## Step 2: Create the MySQL Database and Table
 
-1.	Open MySQL command line or a GUI like MySQL Workbench.
+1.	Open MySQL command line or MySQL Workbench.
 2.	Run the following commands:
 
 CREATE DATABASE task_manager;
