@@ -4,15 +4,14 @@ import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 import { BsCheckLg } from 'react-icons/bs';
 
 function App() {
-  const [isCompleteScreen, setIsCompleteScreen] = useState(false);
+  const [activeTab, setActiveTab] = useState("All");
   const [allTodos, setTodos] = useState([]);
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [completedTodos, setCompletedTodos] = useState([]);
-  const [currentEdit, setCurrentEdit] = useState(null);
+  const [currentEdit, setCurrentEdit] = useState(null);  // Track the ID of the item being edited
   const [currentEditedItem, setCurrentEditedItem] = useState({ title: "", description: "" });
 
-  // Load tasks on mount
   useEffect(() => {
     axios.get('http://localhost:5000/tasks')
       .then(response => {
@@ -26,7 +25,6 @@ function App() {
       .catch(error => console.error('Error fetching tasks:', error));
   }, []);
 
-  // Add a new task
   const handleAddTodo = () => {
     const newTodoItem = {
       title: newTitle,
@@ -43,7 +41,6 @@ function App() {
       .catch(error => console.error('Error adding task:', error));
   };
 
-  // Delete a task
   const handleDeleteTodo = (id) => {
     axios.delete(`http://localhost:5000/tasks/${id}`)
       .then(() => {
@@ -53,7 +50,6 @@ function App() {
       .catch(error => console.error('Error deleting task:', error));
   };
 
-  // Mark a task as completed
   const handleComplete = (id) => {
     const todoToComplete = allTodos.find(todo => todo.id === id);
     
@@ -65,16 +61,17 @@ function App() {
       .catch(error => console.error('Error completing task:', error));
   };
 
-  // Edit a task
+  // Trigger edit mode
   const handleEdit = (id, item) => {
     setCurrentEdit(id); // Set the ID of the item being edited
     setCurrentEditedItem(item); // Set the item to be edited
   };
 
-  // Update a task after editing
+  // Update the task after editing
   const handleUpdateToDo = () => {
     axios.put(`http://localhost:5000/tasks/${currentEdit}`, currentEditedItem)
       .then(() => {
+        // Update the task in allTodos state
         const updatedTodos = allTodos.map(todo => 
           todo.id === currentEdit ? currentEditedItem : todo
         );
@@ -85,9 +82,12 @@ function App() {
       .catch(error => console.error('Error updating task:', error));
   };
 
+  // Combined array for the "All" tab
+  const allTasks = [...allTodos, ...completedTodos];
+
   return (
     <div className="App p-4 bg-black text-white min-h-screen">
-      <h1 className="text-2xl font-bold text-center mb-6">My Tasks</h1>
+      <h1 className="text-2xl font-bold text-center mb-6">My Todos</h1>
 
       <div className="todo-wrapper bg-gray-800 p-6 w-fit mx-auto mt-8 max-h-[80vh] overflow-y-auto shadow-lg rounded-lg">
         <div className="todo-input flex items-center justify-center border-b border-gray-500 pb-6 mb-6">
@@ -122,23 +122,43 @@ function App() {
           </button>
         </div>
 
+        {/* Tab buttons */}
         <div className="btn-area flex space-x-2 mb-4">
           <button 
-            className={`py-2 px-4 rounded ${!isCompleteScreen ? 'bg-green-500 text-white' : 'bg-gray-600 text-gray-300'}`} 
-            onClick={() => setIsCompleteScreen(false)}
+            className={`py-2 px-4 rounded ${activeTab === 'All' ? 'bg-green-500 text-white' : 'bg-gray-600 text-gray-300'}`} 
+            onClick={() => setActiveTab("All")}
+          >
+            All
+          </button>
+          <button 
+            className={`py-2 px-4 rounded ${activeTab === 'Todo' ? 'bg-green-500 text-white' : 'bg-gray-600 text-gray-300'}`} 
+            onClick={() => setActiveTab("Todo")}
           >
             Todo
           </button>
           <button 
-            className={`py-2 px-4 rounded ${isCompleteScreen ? 'bg-green-500 text-white' : 'bg-gray-600 text-gray-300'}`} 
-            onClick={() => setIsCompleteScreen(true)}
+            className={`py-2 px-4 rounded ${activeTab === 'Completed' ? 'bg-green-500 text-white' : 'bg-gray-600 text-gray-300'}`} 
+            onClick={() => setActiveTab("Completed")}
           >
             Completed
           </button>
         </div>
 
+        {/* Task list based on the selected tab */}
         <div className="todo-list space-y-2">
-          {isCompleteScreen === false && allTodos.map((item) => (
+          {activeTab === "All" && allTasks.map((item) => (
+            <div key={item.id} className="todo-list-item bg-gray-700 flex justify-between items-center p-4 mb-2 shadow rounded">
+              <div>
+                <h3 className="text-lg text-green-500 font-bold">{item.title}</h3>
+                <p className="text-gray-300">{item.description}</p>
+                {item.completed === 'Completed' && (
+                  <p className="text-gray-500 text-sm">Completed</p>
+                )}
+              </div>
+            </div>
+          ))}
+
+          {activeTab === "Todo" && allTodos.map((item) => (
             <div key={item.id} className="todo-list-item bg-gray-700 flex justify-between items-center p-4 mb-2 shadow rounded">
               {currentEdit === item.id ? (
                 <div className="edit_wrapper flex flex-col">
@@ -177,11 +197,12 @@ function App() {
             </div>
           ))}
 
-          {isCompleteScreen === true && completedTodos.map((item) => (
+          {activeTab === "Completed" && completedTodos.map((item) => (
             <div key={item.id} className="todo-list-item bg-gray-700 flex justify-between items-center p-4 mb-2 shadow rounded">
               <div>
                 <h3 className="text-lg text-green-500 font-bold">{item.title}</h3>
                 <p className="text-gray-300">{item.description}</p>
+                <p className="text-gray-500 text-sm">Completed</p>
               </div>
               <div>
                 <AiOutlineDelete className="icon text-red-500 hover:text-red-700 cursor-pointer" onClick={() => handleDeleteTodo(item.id)} title="Delete?" />
