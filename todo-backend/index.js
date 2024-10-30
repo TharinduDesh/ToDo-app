@@ -66,24 +66,17 @@ app.put('/tasks/:id', (req, res) => {
 });
 
 // Delete a task
-app.delete('/tasks', (req, res) => {
-  db.query('DELETE FROM tasks', (err) => {
+app.delete('/tasks/:id', (req, res) => {
+  const { id } = req.params;
+  db.query('DELETE FROM tasks WHERE id = ?', [id], (err) => {
     if (err) {
       return res.status(500).send(err);
     }
-
-    // Reset AUTO_INCREMENT
-    db.query('ALTER TABLE tasks AUTO_INCREMENT = 1', (resetErr) => {
-      if (resetErr) {
-        return res.status(500).send(resetErr);
-      }
-      res.sendStatus(200);
-    });
+    res.sendStatus(200);
   });
 });
 
   
-
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
