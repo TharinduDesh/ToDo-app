@@ -116,7 +116,7 @@ function App() {
           <button 
             type="button" 
             onClick={handleAddTodo} 
-            className="bg-green-500 text-white rounded p-2 w-16 hover:bg-green-400"
+            className="bg-green-500 text-white rounded p-2 w-16 mt-8 hover:bg-green-400"
           >
             Add
           </button>
