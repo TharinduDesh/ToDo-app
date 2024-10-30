@@ -134,7 +134,7 @@ function App() {
             className={`py-2 px-4 rounded ${activeTab === 'Todo' ? 'bg-green-500 text-white' : 'bg-gray-600 text-gray-300'}`} 
             onClick={() => setActiveTab("Todo")}
           >
-            Todo
+            Not Completed
           </button>
           <button 
             className={`py-2 px-4 rounded ${activeTab === 'Completed' ? 'bg-green-500 text-white' : 'bg-gray-600 text-gray-300'}`} 
