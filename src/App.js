@@ -12,6 +12,7 @@ function App() {
   const [currentEdit, setCurrentEdit] = useState(null);  // Track the ID of the item being edited
   const [currentEditedItem, setCurrentEditedItem] = useState({ title: "", description: "" });
 
+  // Fetch tasks from the backend
   useEffect(() => {
     axios.get('http://localhost:5000/tasks')
       .then(response => {
@@ -25,6 +26,7 @@ function App() {
       .catch(error => console.error('Error fetching tasks:', error));
   }, []);
 
+  // Handle adding a new task
   const handleAddTodo = () => {
     const newTodoItem = {
       title: newTitle,
@@ -41,6 +43,7 @@ function App() {
       .catch(error => console.error('Error adding task:', error));
   };
 
+  // Handle deleting a task
   const handleDeleteTodo = (id) => {
     axios.delete(`http://localhost:5000/tasks/${id}`)
       .then(() => {
@@ -50,6 +53,8 @@ function App() {
       .catch(error => console.error('Error deleting task:', error));
   };
 
+
+  // Handle marking a task as completed
   const handleComplete = (id) => {
     const todoToComplete = allTodos.find(todo => todo.id === id);
     
@@ -90,6 +95,7 @@ function App() {
       <h1 className="text-2xl font-bold text-center mb-6">My Todos</h1>
 
       <div className="todo-wrapper bg-gray-800 p-6 w-fit mx-auto mt-8 max-h-[80vh] overflow-y-auto shadow-lg rounded-lg">
+      {/* Input fields for new task */}
         <div className="todo-input flex items-center justify-center border-b border-gray-500 pb-6 mb-6">
           <div className="todo-input-item flex flex-col mr-6">
             <label className="font-bold text-white mb-2">Title</label>
