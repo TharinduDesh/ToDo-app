@@ -1,23 +1,43 @@
-# ToDo-app
+# Task Management App
 
-## Step 1: Set Up Your Node.js Server
-### 1.	Initialize a Node.js project:
+A simple task management application built with React, Node.js, MySQL, and Tailwind CSS. This app allows users to add, edit, delete, complete, and filter tasks based on their status.
 
-cd todo-backend 
-npm init -y
+## Features
 
-### 2.	Install required packages:
+Add Task: Add new tasks with title and description.
 
-npm install express mysql2 body-parser cors
+Edit Task: Update task title and description.
 
-## Step 2: Create the MySQL Database and Table
+Delete Task: Remove a task from the list.
 
-1.	Open MySQL command line or MySQL Workbench.
-2.	Run the following commands:
+Mark as Completed: Mark tasks as completed.
+
+Filter Tasks: View tasks based on status ( Not Completed , Completed).
+
+## Technologies Used
+
+Frontend: React, Tailwind CSS
+
+Backend: Node.js, Express, MySQL
+
+Icons: React Icons
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+git clone https://github.com/TharinduDesh/ToDo-app.git
+
+cd task-management-app
+
+### 2. Setup MySQL Database
+
+Open MySQL and run the following commands to create the database and table:
 
 CREATE DATABASE task_manager;
 
 USE task_manager;
+
 
 
 
@@ -30,28 +50,48 @@ CREATE TABLE tasks (
 
   description TEXT,
 
-  completed VARCHAR(15) DEFAULT 'Not Completed'
+  completed VARCHAR(15) DEFAULT 'Not Completed');
 
-);
+### 3. Configure Backend
 
+1.Go to the backend directory:
 
-## Step 3: Update the React Frontend
+cd todo-backend
 
-1.	Install Axios for API calls:
-npm install axios
+2.Install backend dependencies:
 
+npm install
 
-## Step 4: Testing the Server
-### 1.	Start the server:
+3. Set up environment variables:
+
+Create a .env file in the backend directory :
+
+DB_HOST=localhost
+DB_USER=your_mysql_user
+DB_PASSWORD=your_mysql_password
+DB_NAME=task_manager
+PORT=5000
+
+4.Start the backend server:
 
 node index.js
 
-## Step 5: Run Your Project
+### 4.Configure Frontend
 
-Now, start your project 
+1.Go to the frontend directory:
+
+cd todo-app
+
+2.Install frontend dependencies:
+
+npm install
+
+3.Start the frontend:
 
 npm start
 
+### 5.Running the Full Application
 
+Backend: Start the backend server with node index.js.
 
-
+Frontend: Start the frontend with npm start in the frontend directory.
